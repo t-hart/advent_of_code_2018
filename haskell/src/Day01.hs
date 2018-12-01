@@ -9,7 +9,7 @@ readSigned ('+':x) = read x
 readSigned x = read x
 
 partOne :: String -> Int
-partOne = foldl (\acc x -> acc + readSigned x) 0 . lines
+partOne = sum . map readSigned . lines
 
 findRepeated :: (Num a, Ord a) => a -> Set.Set a -> [a] -> a
 findRepeated sum set (x:xs) =
