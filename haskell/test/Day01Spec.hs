@@ -23,12 +23,13 @@ partTwoSpec =
       map
         partTwo
         [ "+1\n-2\n+3\n+1"
-        , "+1\n1"
+        , "+1\n-1"
         , "+3\n+3\n+4\n-2\n-4"
         , "-6\n+3\n+8\n+5\n-6"
         , "+7\n+7\n-2\n-7\n-4"
         ] `shouldBe`
       [2, 0, 10, 5, 14]
+    it "solves the puzzle" $ do partTwo puzzleInput `shouldBe` 69074
 
 puzzleInput :: String
 puzzleInput =
