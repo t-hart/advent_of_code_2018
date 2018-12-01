@@ -1,0 +1,3 @@
+* Advent of code 2018
+
+  Same procedure as last year ... except this time, let's do it.
