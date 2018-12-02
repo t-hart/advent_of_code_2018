@@ -24,18 +24,16 @@ partOne =
   mapTuple length . mapTuple (filter id) . unzip . map countOccurences . lines
 
 -- part two
-diff :: (String, String) -> Int
-diff = length . filter (uncurry (/=)) . uncurry zip
-
 sharedChars :: (String, String) -> String
 sharedChars = map fst . filter (uncurry (==)) . uncurry zip
 
 findIds :: [(String, String)] -> Maybe String
 findIds [] = Nothing
 findIds (x:xs) =
-  if diff x == 1
-    then Just (sharedChars x)
-    else findIds xs
+  let shared = sharedChars x
+   in if length shared == length (fst x) - 1
+        then Just shared
+        else findIds xs
 
 partTwo :: String -> Maybe String
 partTwo = findIds . permutations . lines
