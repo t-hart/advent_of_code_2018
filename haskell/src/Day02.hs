@@ -30,14 +30,14 @@ diff = length . filter (uncurry (/=)) . uncurry zip
 sharedChars :: (String, String) -> String
 sharedChars = map fst . filter (uncurry (==)) . uncurry zip
 
-findIds :: [(String, String)] -> String
+findIds :: [(String, String)] -> Maybe String
+findIds [] = Nothing
 findIds (x:xs) =
   if diff x == 1
-    then sharedChars x
+    then Just (sharedChars x)
     else findIds xs
-findIds [] = "No matches"
 
-partTwo :: String -> String
+partTwo :: String -> Maybe String
 partTwo = findIds . permutations . lines
   where
     permutations xs = [(x, y) | x <- xs, y <- xs]

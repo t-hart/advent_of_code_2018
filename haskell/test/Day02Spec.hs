@@ -21,9 +21,9 @@ partTwoSpec =
   describe "Part two" $ do
     it "solves the examples" $
       partTwo "abcde\nfghij\nklmno\npqrst\nfguij\naxcye\nwvxyz" `shouldBe`
-      "fgij"
+      Just "fgij"
     it "solves the puzzle" $
-      partTwo puzzleInput `shouldBe` "cvqlbidheyujgtrswxmckqnap"
+      partTwo puzzleInput `shouldBe` Just "cvqlbidheyujgtrswxmckqnap"
 
 puzzleInput :: String
 puzzleInput =
