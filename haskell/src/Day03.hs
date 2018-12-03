@@ -3,15 +3,21 @@ module Day03 where
 import Data.List.Split
 import qualified Data.Map.Strict as Map
 import Data.Maybe
+import qualified Data.Set as Set
 
 type Dimensions = (Int, Int)
 
 type Position = (Int, Int)
 
-type ClaimMap = Map.Map Int (Map.Map Int Int)
+type ClaimId = Int
+
+type ClaimMap = Map.Map Int (Map.Map Int [Int])
+
+createClaimMap :: [Claim] -> ClaimMap
+createClaimMap = foldr addClaim Map.empty
 
 data Claim = Claim
-  { claimId :: Int
+  { claimId :: ClaimId
   , position :: Position
   , dimensions :: Dimensions
   } deriving (Show, Eq)
@@ -39,20 +45,32 @@ parseClaim = parse . words
 parseInput :: String -> [Claim]
 parseInput = mapMaybe parseClaim . lines
 
-addSquare :: Position -> ClaimMap -> ClaimMap
-addSquare (x, y) claims =
+claimSquare :: ClaimId -> Position -> ClaimMap -> ClaimMap
+claimSquare cId (x, y) claims =
   let xs = Map.findWithDefault Map.empty y claims
-   in Map.insert y (Map.insertWith (+) x 1 xs) claims
+   in Map.insert y (Map.insertWith (++) x [cId] xs) claims
 
 addClaim :: Claim -> ClaimMap -> ClaimMap
 addClaim claim claims =
   let (x, y) = position claim
+      cId = claimId claim
       (width, height) = dimensions claim
       squares = [(x, y) | x <- [x .. x + width - 1], y <- [y .. y + height - 1]]
-   in foldr addSquare claims squares
+   in foldr (claimSquare cId) claims squares
 
 partOne :: String -> Int
-partOne = countOverlaps . toMap . parseInput
+partOne = countOverlaps . createClaimMap . parseInput
   where
-    toMap = foldr addClaim Map.empty
-    countOverlaps = sum . map (length . filter ((<) 1) . Map.elems) . Map.elems
+    countOverlaps =
+      sum . map (length . filter ((<) 1 . length) . Map.elems) . Map.elems
+
+partTwo :: String -> Maybe ClaimId
+partTwo input =
+  let claims = parseInput input
+      claimMap = createClaimMap claims
+      overlappingClaims =
+        Set.fromList .
+        concat . map (concat . filter ((<) 1 . length) . Map.elems) $
+        Map.elems claimMap
+      ids = Set.fromList $ map claimId claims
+   in Set.lookupMin $ Set.difference ids overlappingClaims

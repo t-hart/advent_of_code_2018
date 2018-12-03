@@ -7,7 +7,7 @@ spec :: Spec
 spec = do
   parserSpec
   partOneSpec
-  -- partTwoSpec
+  partTwoSpec
 
 parserSpec :: Spec
 parserSpec =
@@ -23,10 +23,10 @@ partOneSpec :: Spec
 partOneSpec =
   describe "Part one" $ it "solves the examples" $ partOne examples `shouldBe` 4
 
--- partTwoSpec :: Spec
--- partTwoSpec =
---   describe "Part two" $ do
---     it "solves the examples" $
---       partTwo  `shouldBe`
+partTwoSpec :: Spec
+partTwoSpec =
+  describe "Part two" $ do
+    it "solves the examples" $ partTwo examples `shouldBe` Just 3
+
 examples :: String
 examples = "#1 @ 1,3: 4x4\n#2 @ 3,1: 4x4\n#3 @ 5,5: 2x2"

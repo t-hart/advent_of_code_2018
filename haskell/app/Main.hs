@@ -14,5 +14,5 @@ main :: IO ()
 main = do
   putStrLnExtra "-- Solutions --"
   solve Day03.partOne "puzzleInputs/day03.txt" "Day 03 part 1"
-  -- map solve [solve Day03.partOne "puzzleInputs/day03.txt" "Day 03 part 1"]
+  solve Day03.partTwo "puzzleInputs/day03.txt" "Day 03 part 2"
   putStrLnExtra "-- End --"
