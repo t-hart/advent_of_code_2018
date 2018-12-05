@@ -1,23 +1,53 @@
 module Day04Spec where
 
+import qualified Data.Time as Time
 import Day04
 import Test.Hspec
 
 spec :: Spec
 spec = do
-  parserSpec
+  regexSpec
+  eventCreationSpec
+  sortingSpec
   partOneSpec
   -- partTwoSpec
 
-parserSpec :: Spec
-parserSpec =
-  describe "Parser" $
-  it "Correctly parses the examples" $ parseInput examplesShuffled `shouldBe` []
+regexSpec :: Spec
+regexSpec =
+  describe "Regex" $ do
+    it "mathches correctly" $
+      map parseLogEntry regexTestEntries `shouldBe`
+      [ ["1518-11-04 00:36", "falls asleep"]
+      , ["1518-11-04 00:36", "wakes up"]
+      , ["1518-11-04 00:36", "10"]
+      ]
+
+eventCreationSpec :: Spec
+eventCreationSpec =
+  let event = flip makeEvent regexTestDate
+   in it "creates events correctly" $ do
+        map logEntryToEvent regexTestEntries `shouldBe`
+          map Just [event FallAsleep, event WakeUp, event $ BeginShift 10]
+
+regexTestEntries :: [String]
+regexTestEntries =
+  [ "[1518-11-04 00:36] falls asleep"
+  , "[1518-11-04 00:36] wakes up"
+  , "[1518-11-04 00:36] Guard #10 begins shift"
+  ]
+
+regexTestDate :: Time.UTCTime
+regexTestDate = Time.UTCTime (Time.fromGregorian 1518 11 04) (36 * 60)
+
+sortingSpec :: Spec
+sortingSpec =
+  it "sorts the event list by time" $
+  parseInput examplesShuffled `shouldBe` parseInput examplesSorted
 
 partOneSpec :: Spec
 partOneSpec =
   describe "Part one" $
-  it "solves the examples" $ partOne examplesShuffled `shouldBe` 4
+  it "solves the examples" $ partOne examplesShuffled `shouldBe` 240
 
 -- partTwoSpec :: Spec
 -- partTwoSpec =
