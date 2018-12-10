@@ -10,6 +10,7 @@ spec = do
   eventCreationSpec
   sortingSpec
   partOneSpec
+  findLongestSleeperSpec
   -- partTwoSpec
 
 regexSpec :: Spec
@@ -24,10 +25,16 @@ regexSpec =
 
 eventCreationSpec :: Spec
 eventCreationSpec =
-  let event = flip makeEvent regexTestDate
+  let event = flip Event regexTestDate
    in it "creates events correctly" $ do
         map logEntryToEvent regexTestEntries `shouldBe`
           map Just [event FallAsleep, event WakeUp, event $ BeginShift 10]
+
+findLongestSleeperSpec :: Spec
+findLongestSleeperSpec =
+  describe "Find longest sleeper" $
+  it "finds the longest sleeping guard id and the corresponding minutes" $
+  findLongestSleeping examplesSorted `shouldBe` (10, 50)
 
 regexTestEntries :: [String]
 regexTestEntries =
